@@ -1,0 +1,79 @@
+<!-- 指定繼承 layout.master 母模板 -->
+@extends('layout.master')
+
+<!-- 傳送資料到母模板，並指定變數為 title -->
+@section('title', $title)
+
+<!-- 傳送資料到母模板，並指定變數為 content -->
+@section('content')
+
+<div class="container">
+	<!-- <h1>{{ $title }}</h1> -->
+
+	{{-- 錯誤訊息模板元件 --}}
+	@include('components.validationErrorMessage')
+	<div class="card card-default">
+        <div class="card-header">
+            <h3 class="card-title">{{ $title }}</h3>
+
+            <div class="card-tools">
+	          <button type="button" class="btn btn-tool" data-widget="collapse" data-toggle="tooltip" title="Collapse">
+	            <i class="fas fa-minus"></i></button>
+	          <button type="button" class="btn btn-tool" data-widget="remove" data-toggle="tooltip" title="Remove">
+	            <i class="fas fa-times"></i></button>
+	        </div> 
+        </div>
+          <!-- /.card-header -->
+        <div class="card-body">
+            <form action="/news/adl" method="post" enctype="multipart/form-data">
+
+				{{-- 隱藏方法欄位 --}}
+				{{ method_field('PUT') }}
+
+
+				<div class="form-group col-md-3">
+					<label for="name">標題:</label>
+					<input type="text" class="form-control" name="title" placeholder="標題" value="">
+				</div>
+
+				<div class="form-group col-md-3">
+					<label for="pic">圖片:</label>
+					<input id="pic" type="file" name="pic" placeholder="圖片" value="">
+				</div>
+
+				<div class="form-group col-md-12">
+					<label for="content">內容:</label>
+					<!-- <textarea id="content" class="form-control" type="text" name="content" placeholder="介紹" value=""></textarea> -->
+					<script src="https://cdn.ckeditor.com/4.6.0/standard/ckeditor.js"></script>
+					<textarea name="content">
+						<h2>CKEditor Demo</h2>
+						<hr />
+						<p>使用CKEditor，人生變得好簡單啊！</p>
+					</textarea>
+					<button id="alertContent">取得HTML</button>
+					<script>
+						var editor = CKEDITOR.replace('content');
+						$('#alertContent').click(function(){
+							// CKEDITOR.instances.editorDemo.updateElement();
+							console.log(stringToHTML($('textarea[name=content]').val()));
+							console.log(CKEDITOR.instances.content.getData());
+							// return false;
+						});
+						
+					</script>
+				</div>
+
+				<button type="submit" class="btn btn-success">新增</button>
+				{{-- CSRF 欄位 --}}
+				{{ csrf_field() }}
+			</form>
+		</div>
+          <!-- /.card-body -->
+          <!-- <div class="card-footer">
+            Visit <a href="https://select2.github.io/">Select2 documentation</a> for more examples and information about
+            the plugin.
+          </div> -->
+    </div>
+
+</div>
+@endsection

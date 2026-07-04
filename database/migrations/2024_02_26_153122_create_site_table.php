@@ -1,0 +1,43 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateSiteTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('sites', function (Blueprint $table) {
+            $table->id('site_id');
+            $table->string('site_title', 255)->nullable();
+            $table->string('site_description', 255)->nullable();
+            $table->string('site_name', 255)->nullable();
+            $table->string('site_name_en', 255)->nullable();
+            $table->string('site_lineid', 255)->nullable();
+            $table->string('site_wechartid', 255)->nullable();
+            $table->string('site_cellphone', 255)->nullable();
+            $table->string('site_address', 255)->nullable();
+            $table->string('site_blade', 255)->nullable();
+            $table->string('site_display', 255)->nullable();
+            $table->string('site_maintain', 255)->nullable();
+            $table->string('site_maintain_caption', 255)->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('site');
+    }
+}

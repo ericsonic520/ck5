@@ -1,0 +1,35 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+class CreateBreadcrumbsTable extends Migration
+{
+    /**
+     * Run the migrations.
+     *
+     * @return void
+     */
+    public function up()
+    {
+        Schema::create('breadcrumbs', function (Blueprint $table) {
+            $table->id('breadcrumb_id');
+            $table->string('breadcrumb_name')->nullable();
+            $table->string('breadcrumb_name_en')->nullable();
+            $table->string('breadcrumb_api')->nullable();
+            $table->string('breadcrumb_display')->nullable();
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     *
+     * @return void
+     */
+    public function down()
+    {
+        Schema::dropIfExists('breadcrumbs');
+    }
+}

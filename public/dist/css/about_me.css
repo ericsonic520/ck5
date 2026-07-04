@@ -1,0 +1,79 @@
+.checked {
+  color: orange;
+}
+.exp-cont-tit{
+	font-size: 20px;
+	font-weight: bold;
+	color: black;
+}
+/*span{
+	font-size: 18px;
+	color: #6F17E8;
+}*/
+.abo-tit {
+	color: #F5665A;
+}
+.text {
+	border-radius: 10px;
+	padding: 50px;
+	position: relative;
+    border-radius: 2px;
+    background: #fff;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    box-sizing: border-box;
+}
+.nam {
+	font-size: 30px;
+	font-weight: bold;
+	color: black;
+}
+.nam-txt {
+	font-size: 20px;
+	color: black;
+}
+.overlay {
+	font-size: 30px;
+	color: #3C3C47;
+}
+.skl-cont {
+	padding: 20px;
+}
+.exp-cont-men:before {
+    content: ' ';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+    background-color: #a8a8a8;
+    margin-top: 10px;
+    margin-left: 38px;
+    z-index: 1;
+}
+.exp-cont-met:before {
+    content: ' ';
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+    background-color: #a8a8a8;
+    margin-top: 10px;
+    margin-left: 38px;
+    z-index: 1;
+}
+.exp-cont-men:after
+{
+    content: '';
+    width: 1px;
+    height: 100%;
+    background-color: #979797;
+    display: block;
+    margin-left: 45.5px;
+    top: 10px;
+    z-index: 0;
+}
+.exp-cont-men:after {
+	position: absolute;
+    left: 4.16666667%;
+}
