@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use App\Models\present;
+use App\Models\presents_sixes;
+use App\Models\presents_marries;
 use Storage;
 use DB;
 use Image;
@@ -17,10 +19,10 @@ class PresentController extends Controller
      *
      * @return void
      */
-    // public function __construct()
-    // {
-    //     $this->middleware('auth');
-    // }
+    public function __construct()
+    {
+        $this->middleware('auth');
+    }
     // 首頁
     public function presentList()
     {
@@ -57,7 +59,7 @@ class PresentController extends Controller
         // dd($post_id);
 
         $SitePaginate = DB::table('sites')
-                        ->where('site_id','=','1')
+                        ->where('site_id','=','2')
                         ->get();
         
         $binging = [
@@ -595,31 +597,56 @@ class PresentController extends Controller
     }
 
     // 履歷清單管理
-    public function resumeManageList (){
+    public function resumeManageList (Request $request){
+        $resume_id = session()->get('resume_id');
+        $page = $request->page;
+        $Resume_id = session()->put('page',$page);
+        // dd($Resume_id);
+
+        $hasDisplay = DB::table('presents')
+        ->where('resume_display', 1)
+        ->exists(); // 回傳 bool (true 或 false)
+        
        // 每頁資料量
         $row_per_page = 10;
             
         $ResumePaginate  = DB::table('presents')
                     ->paginate($row_per_page);
+
+        $presents_all = DB::table('presents')->get();
+
         $binging = [
             'title' => '履歷管理',
             'ResumePaginate' => $ResumePaginate,
+            'resume_id' => $resume_id,
+            'hasDisplay' => $hasDisplay,
+            'presents_all' => $presents_all,
         ];
         return view('present.resumeManage', $binging);
     }
 
     public function resumeItemEdit($resume_id)  {
         $Resume_id = session()->put('resume_id', $resume_id);
+        $page = session()->get('page');
         $presents = DB::table('presents')
                 ->where('presents.resume_id','=',$resume_id)
                 ->get();
+        $presents_all = DB::table('presents')->get();
+        
+        
+        $presents_six = DB::table('presents_sixes')->get();
+        $presents_marry = DB::table('presents_marries')->get();
+        $presents_skill_type = DB::table('presents_skill_types')->get();
 
         $resume_experience = $presents[0]->resume_experience;
         $resume_experience_decode = json_decode($resume_experience,true);
 
         $resume_skill = $presents[0]->resume_skill;
         $resume_skill_decode = json_decode($resume_skill,true);
-                
+
+        $resume_sideproject = $presents[0]->resume_sideproject;
+        $resume_sideproject_decode = json_decode($resume_sideproject,true);
+        //    dd($resume_sideproject_decode);     
                 // $presents = DB::table('presents')
                 //         ->where('presents.resume_display','=','1')
                 //         ->get();
@@ -630,9 +657,15 @@ class PresentController extends Controller
         $binding = [
             'title' => '編輯履歷',
             'presents' => $presents,
+            'presents_all' => $presents_all,
+            'presents_sixes' => $presents_six,
+            'presents_marries' => $presents_marry,
+            'presents_skill_types' => $presents_skill_type,
             'resume_experience_decode' => $resume_experience_decode,
             'resume_skill_decode' => $resume_skill_decode,
+            'resume_sideproject_decode' => $resume_sideproject_decode,
             'resume_id' => $resume_id,
+            'page' => $page,
         ];
 
         if($SitePaginate[0]->site_maintain=='0'){
@@ -795,23 +828,36 @@ class PresentController extends Controller
         // 轉為標準 JSON 字串
         $portfolioJson = json_encode($portfolioArray, JSON_UNESCAPED_UNICODE);
 
+        if ($request->hasFile("avatar")) {
+                $thumbPath = $request->file("avatar")->store('avatar', 'public');
+                // 產生不會重複的隨機檔名
+                date_default_timezone_set('Asia/Taipei');
+                $filename = 'images/present/'.date('Ymdhis') . '_' . pathinfo($request->file("avatar")->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $request->file("portfolio_image.{$index}")->getClientOriginalExtension();
+                $targetPath = public_path('images/present');
+                // 如果該資料夾不存在，自動建立它
+                if (!File::isDirectory($targetPath)) {
+                    File::makeDirectory($targetPath, 0777, true, true);
+                }
+                // 將檔案直接移動到 public/images/present 資料夾
+                $request->file("avatar")->move($targetPath, $filename);
+            }
         // 3. 實體頭像儲存
-        // 原始檔名
-        $fileName = $_FILES['avatar']['name'];
-        // 取出原始檔名的檔案名稱
-        $name = pathinfo($fileName, PATHINFO_FILENAME);
-        // 有上傳圖片
-        $pic = $request->file('avatar');
-        // 檔案副檔名
-        $file_extension = $pic->getClientOriginalExtension();
-        // 產生自訂隨機檔案名稱
-        $file_name = $name . '-' . date('Y'.'m'.'d'.'H'.'i'.'s') . '.' . $file_extension;
-        // 檔案相對路徑
-        $avatarPath = 'images/present/' . $file_name;
-        // 檔案存放目錄為對外公開public目錄下的相對位置
-        $file_path = public_path($avatarPath);
-        // 裁切圖片
-        $image = Image::make($pic)->save($file_path);
+        // // 原始檔名
+        // // $fileName = $_FILES['avatar']['name'];
+        // // 有上傳圖片
+        // $pic = $request->file('avatar');
+        // // 取出原始檔名的檔案名稱
+        // $name = pathinfo($pic->getClientOriginalName(), PATHINFO_FILENAME);
+        // // 檔案副檔名
+        // $file_extension = $pic->getClientOriginalExtension();
+        // // 產生自訂隨機檔案名稱
+        // $file_name = $name . '-' . date('Y'.'m'.'d'.'H'.'i'.'s') . '.' . $file_extension;
+        // // 檔案相對路徑
+        // $avatarPath = 'images/present/' . $file_name;
+        // // 檔案存放目錄為對外公開public目錄下的相對位置
+        // $file_path = public_path($avatarPath);
+        // // 裁切圖片
+        // $image = Image::make($pic)->save($file_path);
         
         // $avatarPath = $request->file('avatar')->public_path('present', 'images');
         $uploadedPortfolioPaths = []; // 用於失敗時回滾清理
@@ -879,8 +925,294 @@ class PresentController extends Controller
         //     ]
         // ]);
     }
+    public function testAjax2(Request $request) {
+        $resume_id = session()->get('resume_id');
+        $Resume_id_put = session()->put('resume_id', $resume_id);
+        // 1. PHP 後端安全二次驗證（包含所有動態生成欄位）
+        $validator = Validator::make($request->all(), [
+            'avatar'      => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', 
+            'resume_name' => 'required|string|max:255',
+            'name'        => 'required|string|max:255',
+            'gender'      => 'required|in:1,2,0',
+            'age'         => 'required|integer|between:1,120',
+            'marriage'    => 'required|in:1,2',
+            'school'      => 'required|string|max:255',
+            'phone'       => ['required', 'regex:/^09[0-9]{8}$/'],
+            'email'       => 'required|email|max:255',
+            'summary'     => 'required|string',
+            'job_summary' => 'required|string',
+
+            // 工作經歷欄位驗證
+            'exp_time'    => 'required|array|min:1',
+            'exp_time.*'  => 'required|string|max:255',
+            'exp_company' => 'required|array|min:1',
+            'exp_company.*'=> 'required|string|max:255',
+            'exp_title'   => 'required|array|min:1',
+            'exp_title.*' => 'required|string|max:255',
+
+            // 專業技能欄位驗證
+            'skill_category'   => 'required|array|min:1',
+            'skill_category.*' => 'required|in:frontend,backend',
+            'skill_name'       => 'required|array|min:1',
+            'skill_name.*'     => 'required|string|max:255',
+            'skill_level'      => 'required|array|min:1',
+            'skill_level.*'    => 'required|integer|between:1,5',
+
+            // 作品集欄位驗證 (對應前端新佈局順序)
+            'portfolio_image'   => 'required|array|min:1',
+            'portfolio_image.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'portfolio_title'   => 'required|array|min:1',
+            'portfolio_title.*' => 'required|string|max:255',
+            'portfolio_link'    => 'required|array|min:1',
+            'portfolio_link.*'  => 'required|url|max:255',
+            'portfolio_desc'    => 'required|array|min:1',
+            'portfolio_desc.*'  => 'required|string',
+        ], [
+            'avatar.required' => '個人頭像為必填項。',
+            'phone.regex' => '手機號碼格式必須為合法的台灣手機 10 碼。',
+            'exp_time.*.required' => '工作經歷的「在職時間」未填寫。',
+            'exp_company.*.required' => '工作經歷的「公司名稱」未填寫。',
+            'exp_title.*.required' => '工作經歷的「職稱」未填寫。',
+            'skill_category.*.required' => '專業技能的「類別」未選取。',
+            'skill_name.*.required' => '專業技能的「技能名稱」未填寫。',
+            'skill_level.*.required' => '專業技能的「熟練度」未選取。',
+            'portfolio_image.*.required' => '作品集的「作品縮圖」未上傳。',
+            'portfolio_image.*.image' => '作品縮圖必須是正確的圖片格式。',
+            'portfolio_title.*.required' => '作品集的「作品名稱」未填寫。',
+            'portfolio_link.*.url' => '作品集的「作品連結」網址格式不正確。',
+            'portfolio_desc.*.required' => '作品集的「作品說明」未填寫。'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // 2. 儲存實體個人頭像圖片到 storage/app/public/avatars
+        $avatarPath = $request->file('avatar')->store('avatars', 'public');
+
+
+        // 3. 【核心需求】將「在職時間、公司、職稱」打包成工作經歷的 JSON 格式
+        $experienceArray = [];
+        
+        foreach ($request->exp_time as $index => $time) {
+            $experienceArray[] = [
+                'ID' => $index+1,
+                '在職時間'    => $time,
+                '公司' => $request->exp_company[$index],
+                '職稱'   => $request->exp_title[$index]
+            ];
+        }
+        
+        // 轉為標準 JSON 字串
+        $experienceJson = json_encode($experienceArray, JSON_UNESCAPED_UNICODE);
+
+
+        // 4. 【核心需求】將「類別、技能、熟練度」打包成專業技能的 JSON 格式
+        $skillArray = [];
+        
+        foreach ($request->skill_name as $index => $name) {
+            $skillArray[] = [
+                'ID' => $index+1,
+                'type' => $request->skill_category[$index],
+                'skill'     => $name,
+                'trained'    => (int)$request->skill_level[$index]
+            ];
+        }
+        
+        // 轉為標準 JSON 字串
+        $skillJson = json_encode($skillArray, JSON_UNESCAPED_UNICODE);
+
+
+        // 5. 【核心需求】將「作品名稱、作品連結、作品說明、作品縮圖」打包成作品集的 JSON 格式
+        $portfolioArray = [];
+        foreach ($request->portfolio_title as $index => $title) {
+            $thumbPath = null;
+            // 逐一處理並上傳對應的作品多張縮圖到 storage/app/public/portfolios
+            if ($request->hasFile("portfolio_image.{$index}")) {
+                $thumbPath = $request->file("portfolio_image.{$index}")->store('portfolios', 'public');
+                // 產生不會重複的隨機檔名
+                date_default_timezone_set('Asia/Taipei');
+                $file = $request->file("portfolio_image.{$index}");
+    
+                //  先把變數定義好（例如用原本的檔名，或者用時間戳記重新命名）
+                $filename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+                $extension = $file->getClientOriginalExtension()?: 'jpg';
+                $destination = 'images/present/'.date('Ymdhis') . '_' . $filename . '.' . $extension;
+                $targetPath = public_path('images/present');
+                // 如果該資料夾不存在，自動建立它
+                if (!File::isDirectory($targetPath)) {
+                    File::makeDirectory($targetPath, 0777, true, true);
+                }
+                // 將檔案直接移動到 public/images/present 資料夾
+                $file->move($targetPath, $destination);
+            }
+        // // 2. 定義 public 底下的目標路徑：public/images/box
+        // $targetPath = public_path('images/present');
+
+        // // 如果該資料夾不存在，自動建立它
+        // if (!File::isDirectory($targetPath)) {
+        //     File::makeDirectory($targetPath, 0777, true, true);
+        // }
+
+        // $thumbPath = [];
+
+        // // 3. 開始處理多圖上傳
+        // if ($request->hasFile('portfolio_image.{$index}')) {
+        //     foreach ($request->file('portfolio_image.{$index}') as $image) {
+                
+        //         // 產生不會重複的隨機檔名
+        //         $filename = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+                
+        //         // 將檔案直接移動到 public/images/box 資料夾
+        //         $image->move($targetPath, $filename);
+                
+        //         // 記錄存入的檔名或相對路徑（用於存入資料庫或前端顯示）
+        //         $thumbPath[] = 'images/present/' . $filename;
+        //     }
+        //     // $thumbPath = json_encode($thumbPath, JSON_UNESCAPED_UNICODE);
+        // }
+        // // $thumbPath = json_encode($thumbPath, JSON_UNESCAPED_UNICODE);
+            
+            $portfolioArray[] = [
+                'ID' => $index+1,
+                '圖片名稱'       => $title,
+                '連結'        => $request->portfolio_link[$index],
+                '說明' => $request->portfolio_desc[$index],
+                '路徑'   => $destination // 這裡存放上傳成功後的縮圖檔案路徑
+            ];
+            
+        }
+        // 轉為標準 JSON 字串
+        $portfolioJson = json_encode($portfolioArray, JSON_UNESCAPED_UNICODE);
+
+        if ($request->hasFile("avatar")) {
+            // 3. 實體頭像儲存
+            // 原始檔名
+            // $fileName = $_FILES['avatar']['name'];
+            // 有上傳圖片
+            $pic = $request->file('avatar');
+            // 取出原始檔名的檔案名稱
+            $name = pathinfo($pic->getClientOriginalName(), PATHINFO_FILENAME);
+
+            // 【新增這行】如果原始檔名最前面有類似 20260720105424_ 的數字底線組合，自動把它移除
+            $name = preg_replace('/^\d{8,14}_/', '', $name);
+            
+            // 檔案副檔名
+            $file_extension = $pic->getClientOriginalExtension()?: 'jpg';
+            // 產生自訂隨機檔案名稱
+            $avatarPath = 'images/present/'.date('Ymdhis') . '_' . $name . '.' . $file_extension;
+            // $file_name = $name . '-' . date('Y'.'m'.'d'.'H'.'i'.'s') . '.' . $file_extension;
+            // 檔案相對路徑
+            // $avatarPath = 'images/present/' . $file_name;
+            // 檔案存放目錄為對外公開public目錄下的相對位置
+            $file_path = public_path($avatarPath);
+            // 裁切圖片
+            $image = Image::make($pic)->save($file_path);
+        }
+        
+        // $avatarPath = $request->file('avatar')->public_path('present', 'images');
+        $uploadedPortfolioPaths = []; // 用於失敗時回滾清理
+
+        if($request->resume_display=='1'){
+            present::where('resume_display', '1')
+            ->update(['resume_display' => '0']);
+        }
+        
+        
+        // 4. 利用資料庫 Transaction（交易）安全儲存資料
+        DB::beginTransaction();
+        try {
+            // 儲存主表資料並取得產生的 ID
+            $present = present::find($resume_id);
+            $present->update([
+                'resume_name'   => $request->resume_name,
+                'resume_nickname'           => $request->name,
+                'resume_sex'         => $request->gender,
+                'resume_age'            => $request->age,
+                'resume_marry' => $request->marriage,
+                'resume_education'         => $request->school,
+                'resume_cellphone'          => $request->phone,
+                'resume_email'          => $request->email,
+                'resume_summary'            => $request->summary,
+                'resume_introduction'  => $request->job_summary,
+                'resume_picme'    => $avatarPath,
+                'resume_experience'    => $experienceJson,
+                'resume_skill'    => $skillJson,
+                'resume_sideproject'  => $portfolioJson,
+                'resume_display'  => $request->resume_display,
+                'created_at'     => now(),
+                'updated_at'     => now(),
+            ]);
+
+            
+
+            DB::commit();
+            return response()->json(['message' => '履歷資料已儲存成功']);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            // 萬一資料庫中途斷線或儲存失敗，立刻自動清除剛才上傳的實體圖片，保持伺服器乾淨
+            if ($avatarPath) {
+                Storage::disk('public')->delete($avatarPath);
+            }
+
+            return response()->json([
+                'errors' => ['system' => ['伺服器儲存失敗，錯誤回報：' . $e->getMessage()]]
+            ], 500);
+        }
+
+        // 6. 執行資料庫儲存
+        // 您可以將 $experienceJson, $skillJson, $portfolioJson 直接寫入您 Resume 模型的對應文字或 JSON 欄位中。
+        // Resume::create([
+        //     'avatar' => $avatarPath,
+        //     'resume_name' => $request->resume_name,
+        //     ...
+        //     'experiences' => $experienceJson,
+        //     'skills' => $skillJson,
+        //     'portfolios' => $portfolioJson,
+        // ]);
+
+        // return response()->json([
+        //     'success' => true, 
+        //     'message' => '履歷資料已成功儲存！',
+        //     'data_preview' => [
+        //         'experiences_json' => $experienceJson,
+        //         'skills_json'      => $skillJson,
+        //         'portfolios_json'  => $portfolioJson
+        //     ]
+        // ]);
+    }
+
+    public function toggleStatus(Request $request) {
+        // 1. 驗證前端傳過來的資料是否合法
+        $request->validate([
+            'id' => 'required|integer',
+            'resume_display' => 'required|in:0,1', // 狀態必須是 0 或 1
+        ]);
+
+        present::where('resume_display', '1')
+        ->update(['resume_display' => '0']);
+        // 2. 尋找對應的資料
+        $present = present::find($request->id);
+        
+        if ($present) {
+            // 3. 修改欄位並儲存 (Laravel 會自動把 0/1 轉為 boolean 寫入 tinyint 欄位)
+            $present->update([
+                'resume_display'  => $request->resume_display,
+            ]);
+
+            // 4. 回傳 JSON 成功訊息
+            return response()->json(['success' => true, 'message' => '狀態更新成功！']);
+        }
+
+        // 找不到資料時回傳 404
+        return response()->json(['success' => false, 'message' => '找不到該筆設定。'], 404);
+    }
 
     public function resumeChangeResumeDisplay(Request $request,$id) {
+        $page = session()->get('page');
+        $resume_id_put = session()->put('resume_id',$id);
         $resume_display = $request->resume_display;
         present::where('resume_display', '1')
     ->update(['resume_display' => '0']);
@@ -892,6 +1224,6 @@ class PresentController extends Controller
         // ]);
         $pre=DB::table('presents')->get();
         $currentUrl = url()->previous();
-        return redirect($currentUrl);
+        return redirect('/present/manage?page=' . $page);
     }
 }

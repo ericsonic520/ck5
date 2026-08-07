@@ -850,7 +850,7 @@ class NewsController extends Controller
             'PostPaginate' => $PostPaginate,
         ];
 
-        return view('News.newsList', $binding);
+        return view('news.newsList', $binding);
     }
 
     public function newsItemDel($News_id)
@@ -1015,7 +1015,7 @@ class NewsController extends Controller
     }
 
     // 處理新增輪播
-    public function newsAddCarouselDeal(){
+    public function newsAddCarouselDeal(request $request){
         // 接收輸入資料
         $input = request()->all();
 
@@ -1055,13 +1055,13 @@ class NewsController extends Controller
             // 檔案副檔名
             $file_extension = $carousel_image->getClientOriginalExtension();
             // 產生自訂隨機檔案名稱
-            $file_name = uniqid() . '.' . $file_extension;
+            $file_name = date('Ymdhis') . '_' . pathinfo($request->file("carousel_image")->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file_extension;
             // 檔案相對路徑
-            $file_relative_path = 'images/news/' . $file_name;
+            $file_relative_path = '/images/present/' . $file_name;
             // 檔案存放目錄為對外公開public目錄下的相對位置
             $file_path = public_path($file_relative_path);
             // 裁切圖片
-            $image = Image::make($carousel_image)->fit(250,100)->save($file_path);
+            $image = Image::make($carousel_image)->/*fit(250,100)->*/save($file_path);
             // 設定圖片檔案相對路徑
             $input['carousel_image'] = $file_relative_path;
         }   
@@ -1321,6 +1321,86 @@ class NewsController extends Controller
             'CarouselPaginate' => $CarouselPaginate,
         ];
         return view('news.newsCarouselManage', $binging);
+    }
+
+    //輪播圖片更新
+    public function newsCarouselEdit($Carousel_id){
+        //$News = carousels::findOrFail($news_id);
+        $Carousels = DB::table('carousels')
+                    ->where('carousels.carousel_id','=',$Carousel_id)
+                    ->get();
+       
+
+        $binding = [
+            'title' => '編輯新聞',
+            'Carousel_id' => $Carousel_id,
+            'Carousels' => $Carousels,
+        ];
+
+        return view('news.newsCarouselEdit', $binding);
+    }
+
+    // 輪播圖片更新處理
+    public function newsCarouselEditDeal(request $request,$Carousel_id) {
+        
+        $input = request()->all();
+
+        // 驗證規則
+        $rules = [       
+            // 輪播名稱
+            'carousel_title' => [
+                'required',
+                'max:80'
+            ],
+            // 輪播說名
+            'carousel_description' => [
+                'required',
+                'max:80'
+            ],
+            // 輪播圖片
+            'carousel_image' => [
+                'nullable',               // 允許不更新圖片
+                'image',                  // 限制必須是圖片格式 (jpeg, png, bmp, gif, svg, webp)
+                'mimes:jpeg,png,jpg,webp',// 嚴格限制副檔名 (選填)
+                'max:2048'                // 限制檔案最大 2048 KB (即 2MB)
+            ],
+        ];
+
+         // 驗證資料
+        $validator = Validator::make($input, $rules);
+ 
+        if ($validator->fails()) {
+             // 資料驗證錯誤
+             return redirect('/news/'.$Carousel_id.'/carouselEdit')      
+                 ->withErrors($validator)
+                 ->withInput();
+         }
+
+         if (isset($input['carousel_image'])) {
+            // 有上傳圖片
+            $pic = $input['carousel_image'];
+            // 檔案副檔名
+            $file_extension = $pic->getClientOriginalExtension();
+            // 產生自訂隨機檔案名稱
+            $file_name = date('Ymdhis') . '_' . pathinfo($request->file("carousel_image")->getClientOriginalName(), PATHINFO_FILENAME) . '.' . $file_extension;
+            // 檔案相對路徑
+            $file_relative_path = '/images/present/' . $file_name;
+            // 檔案存放目錄為對外公開public目錄下的相對位置
+            $file_path = public_path($file_relative_path);
+            // 裁切圖片
+            $image = Image::make($pic)->save($file_path);
+            // 設定圖片檔案相對路徑
+            $input['carousel_image'] = $file_relative_path;
+            
+        }
+
+        $carousel = carousel::find($Carousel_id);
+        $carousel->update([
+            'carousel_title' => $request->carousel_title,
+            'carousel_description' => $request->carousel_description,
+            'carousel_image' => $input['carousel_image'],
+        ]);
+        return redirect('/news/'.$Carousel_id.'/carouselEdit');
     }
 
     public function joinClass()

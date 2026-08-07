@@ -48,6 +48,7 @@
 									<button method="submit" class="btn btn-warning" title="隱藏"><i class="fas fa-solid fa-eye-slash"></i></button>
 									@endif
 									<input type="hidden" name="carousel_display" value="{{$carousel->carousel_display}}">
+									<input type="hidden" name="carousel_id" value="{{$carousel->carousel_id}}">
 								</form> 
 							</td>
 							<td>
@@ -57,7 +58,7 @@
 										<!-- <a href="/news/{{ $carousel->carousel_id }}/itm">
 											<button class="btn btn-success"><i class="far fa-eye"></i></button>
 										</a> -->
-										<a href="/news/{{ $carousel->carousel_id }}/breadcrumbEdit">
+										<a href="/news/{{ $carousel->carousel_id  }}/carouselEdit">
 											<button class="btn btn-primary" title="更新內容"><i class="fas fa-edit"></i></button>
 										</a>
 										<!--<a href="/warning">

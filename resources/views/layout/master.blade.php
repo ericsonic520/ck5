@@ -25,7 +25,7 @@
 		<!-- summernote -->
 		<link rel="stylesheet" href="{{ URL::asset('plugins/summernote/summernote-bs4.css') }}">
 		<!-- Google Font: Source Sans Pro -->
-		<link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+		<link href="{{ URL::asset('css/googleapis.css') }}" rel="stylesheet">
 
 		<!-- bootstrap-datepicker -->
 		<script type="text/javascript" src="{{ URL::asset('/plugins/bootstrap-datetimepicker-master/jquery.min.js') }}"></script>
@@ -38,8 +38,8 @@
 		<script src="{{ URL::asset('~/Content/pace.js') }}"></script>
 		<link href="{{ URL::asset('~/Content/themes/blue/pace-theme-flash.css') }}" rel="stylesheet" /> 
 	  	 
-		<link rel="stylesheet" type="text/css" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+		<link rel="stylesheet" type="text/css" href="{{ URL::asset('/css/bootstrap.min.css') }}">
+		<script src="{{ URL::asset('/js/jquery-3.6.0.min.js') }}"></script>
 		<meta name="csrf-token" content="{{ csrf_token() }}">
 	</head>
 	<body class="hold-transition sidebar-mini layout-fixed">

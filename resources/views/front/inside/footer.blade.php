@@ -27,8 +27,8 @@
     </div>
   </div>
   <div>LINE ID:{{ $site_lineid }}</div>
-  <div>Wechat id：{{ $site_wechartid }}</div>
-  <div>連繫電話 ：{{ $site_cellphone }}</div>
-  <div>地址 ：{{ $site_address }}</div>
+  <!-- <div>Wechat id：{{ $site_wechartid }}</div> -->
+  <!-- <div>連繫電話 ：{{ $site_cellphone }}</div> -->
+  <!-- <div>地址 ：{{ $site_address }}</div> -->
   <div>Copyright©<?php echo date('20y')?> ericsonic520,ltd.All right reserved.</p> 
 </footer>

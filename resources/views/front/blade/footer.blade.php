@@ -81,6 +81,8 @@
   <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
+  
+  @if($site_blade=='front.classItem')
   <div class="parent_foot">
     <div class="col-md-12 child_foot">
         @foreach($breadcrumbs as $breadcrumb)
@@ -88,9 +90,10 @@
         @endforeach
     </div>
   </div>
+  @endif
   <p>LINE ID:{{ $PostPaginate[0]->site_lineid }}</p>
-  <p>Wechat id：{{ $PostPaginate[0]->site_wechartid }}</p>
+  <!-- <p>Wechat id：{{ $PostPaginate[0]->site_wechartid }}</p> -->
   <p>連繫電話 ：{{ $PostPaginate[0]->site_cellphone }}</p>
-  <p>地址 ：{{ $PostPaginate[0]->site_address }}</p>
+  <!-- <p>地址 ：{{ $PostPaginate[0]->site_address }}</p> -->
   <p>Copyright©<?php echo date('20y')?> ericsonic520,ltd.All right reserved.</p> 
 </footer>

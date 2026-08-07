@@ -32,7 +32,7 @@
         <div class="card-body">
             <form action="/upd_data/{{$news_id}}" method="post" enctype="multipart/form-data">
 
-              {{-- 隱藏方法欄位 --}}
+              {{-- 隱藏方法欄位 --}} 
               {{ method_field('PUT') }}
 
               <div class="container">

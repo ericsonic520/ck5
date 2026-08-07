@@ -62,7 +62,9 @@ class FrontController extends Controller
                         ->where('site_display' , '=' ,'1')
                         ->get();
         // dd($site_blade);
-        $CarouselPaginate = DB::table('carousels')->get();
+        $CarouselPaginate = DB::table('carousels')
+                        ->where('carousel_display' , '=' ,'1')
+                        ->get();
 		// 設定新聞標題網址
         // foreach ($PostPaginate as &$Post) {
         //     if (!is_null($Post->title)) {
@@ -86,6 +88,11 @@ class FrontController extends Controller
         $presents = DB::table('presents')
                         ->where('presents.resume_display','=','1')
                         ->get();
+       $master_presents = DB::table('presents')->get();    
+        if(!$master_presents->contains('resume_display', 1)){
+            echo '目前沒有選擇任何一個履歷頁面';
+            return;
+        }
         $resume_experience = $presents[0]->resume_experience;
         $resume_experience_echo = json_decode($resume_experience,true);
 
@@ -102,6 +109,7 @@ class FrontController extends Controller
             'postall' => $postall,
             'faqall' => $faqall,
             'total_pages' => $total_pages,
+            'site_blade' => $site_blade[0]->site_blade,
             'site' => $SitePaginate,
             'CarouselPaginate' => $CarouselPaginate,
             'site_maintain_loginapi' => $site_maintain_loginapi,

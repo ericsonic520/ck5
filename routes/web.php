@@ -26,6 +26,11 @@ Auth::routes();
 Route::get('/', 'FrontController@classIndex');
 // 处理AJAX验证请求
 Route::post('/verifydata', 'PresentController@testAjax');
+// 处理AJAX验证请求
+Route::put('/verifydata2', 'PresentController@testAjax2');
+// 处理AJAX验证请求
+// 定義 AJAX 接收的 POST 路由
+Route::post('/verifydata3', [PresentController::class, 'toggleStatus']);
 // 3. 顯示結果列表頁
 Route::get('/resume/list', [PresentController::class, 'list'])->name('resume.list');
 // 自我介紹
@@ -70,7 +75,7 @@ Route::group(['prefix' => 'user'], function (){
 	// 使用者驗證
 	Route::group(['prefix' => 'auth'], function (){
 		// 註冊
-		Route::get('/register', 'UserController@signUp');
+		Route::get('/register', 'UserController@signUp'); 
 		// 處理註冊
 		Route::post('/register', 'UserController@signUpDeal');
 		// 登入
@@ -221,6 +226,9 @@ Route::group(['prefix' => 'news'], function (){
 		Route::get('/breadcrumbEdit', 'NewsController@newsBreadcrumbEdit');
 		// 處理修改麵包屑
 		Route::put('/breadcrumbEditDeal', 'NewsController@newsBreadcrumbEditDeal');
+		// 修改輪播圖片
+		Route::get('/carouselEdit', 'NewsController@newsCarouselEdit');
+		Route::put('/carouselEditDeal', 'NewsController@newsCarouselEditDeal');
 		// 修改選單
 		Route::get('/menuEdit', 'NewsController@newsMenuEdit');
 		// 處理修改選單
