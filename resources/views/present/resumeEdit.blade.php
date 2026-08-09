@@ -809,7 +809,8 @@ $(document).ready(function() {
             })
             .then(function(blob) {
                 // 將 Blob 封裝成標準的 JavaScript File 物件
-                var file = new File([blob], initAvatarName, { type: blob.type });
+                var mimeType = blob.type || 'image/jpeg';
+                var file = new File([blob], initAvatarName || 'avatar.jpg', { type: mimeType });
 
                 // 💥 業界黑魔法：利用 DataTransfer 容器繞過 input files 的唯讀限制
                 var dataTransfer = new DataTransfer();
@@ -822,7 +823,7 @@ $(document).ready(function() {
                 console.log("預設資料注入成功：", $fileInput[0].files[0]);
             })
             .catch(function(error) {
-                console.error("後端圖片轉換失敗:", error);
+                console.error("後端圖片轉換失敗詳細資訊:", error.message, error);
             });
     }
 
