@@ -1272,11 +1272,16 @@ $(document).ready(function() {
         // 整理成 FormData 送往後端
         let formData = new FormData(this);
 
-        formData.append('resume_display', $('#statusCheckbox').prop('checked') ? 1 : 0,);
+        formData.append('resume_display', $('#statusCheckbox').prop('checked') ? 1 : 0);
         formData.append('resume_id', $('#statusCheckbox').data('id'));
 
         // 無論使用者有沒有換圖，這裡永遠抓得到檔案物件！
-        formData.append('avatar', $('#avatar-file-input')[0].files[0]);
+        const avatarFile = $('#avatar-file-input')[0]?.files[0];
+        formData.delete('avatar');
+        if (avatarFile) {
+            formData.append('avatar', avatarFile);
+        }
+        
         formData.append('_token', '<?php echo e(csrf_token()); ?>');
         
         // 巡檢每一筆 input，直接 append 進 FormData 
@@ -1303,11 +1308,13 @@ $(document).ready(function() {
             },
             error: function(xhr) {
                 $('#submitBtn').prop('disabled', false).text('儲存履歷');
-                if(xhr.status === 422) {
+                if (xhr.status === 422 && xhr.responseJSON && xhr.responseJSON.errors) {
                     let errors = xhr.responseJSON.errors;
                     alert('後端驗證失敗：\n' + Object.values(errors).flat().join('\n'));
+                } else if (xhr.status === 413) {
+                    alert('檔案大小超過伺服器限制，請縮減圖片尺寸後再試。');
                 } else {
-                    alert('系統發生錯誤，請稍後再試。');
+                    alert('系統發生錯誤（HTTP ' + xhr.status + '），請稍後再試。');
                 }
             }
         });
