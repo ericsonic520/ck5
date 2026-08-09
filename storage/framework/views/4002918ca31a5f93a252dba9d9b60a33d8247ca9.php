@@ -32,7 +32,7 @@
         <div class="card-body">
             <form action="/upd_data/<?php echo e($news_id); ?>" method="post" enctype="multipart/form-data">
 
-              
+               
               <?php echo e(method_field('PUT')); ?>
 
 

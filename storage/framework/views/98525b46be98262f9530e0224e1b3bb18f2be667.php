@@ -35,7 +35,7 @@
 				<div class="inf_tit">姓名</div><div class="inf_des"><?php echo e($presents->resume_nickname); ?></div><br/>
 				<div class="inf_tit">性別</div><div class="inf_des"><?php if($presents->resume_sex==1): ?>男<?php else: ?>女<?php endif; ?></div><br/>
 				<div class="inf_tit">年齡</div><div class="inf_des"><?php echo e($presents->resume_age); ?></div><br/>
-				<div class="inf_tit">婚姻狀態</div><div class="inf_des"><?php if($presents->resume_marry==1): ?>已婚<?php else: ?>未婚<?php endif; ?></div><br/>
+				<!-- <div class="inf_tit">婚姻狀態</div><div class="inf_des"><?php if($presents->resume_marry==1): ?>未婚<?php else: ?>已婚<?php endif; ?></div><br/> -->
 				<div class="inf_tit">學歷</div><div class="inf_des"><?php echo e($presents->resume_education); ?></div><br/>
 				<div class="inf_tit">手機</div><div class="inf_des"><?php echo e($presents->resume_cellphone); ?></div><br/>
 				<div class="inf_tit">信箱</div><div class="inf_des"><?php echo e($presents->resume_email); ?></div><br/>
@@ -87,9 +87,11 @@
 
 							for ($i = 1; $i <= $totalStars; $i++) {
 								if ($i <= $yellowStars) {
-									echo '<span class="star star-yellow"></span>';// 前三個圓圈
+									echo '<span class="fas fa-star" style="color:yellow;/* 設定外框粗細和顏色 */
+    /* -webkit-text-stroke: 3px #ffff8a;*/"></span>';// 前三個圓圈
 								}else{
-									echo '<span class="star star-gray"></span>';// 剩兩個圓圈
+									echo '<span class="far fa-star" style="color:yellow;/* 設定外框粗細和顏色 */
+    /* -webkit-text-stroke: 3px #f0f0f0; */"></span>';// 剩兩個圓圈
 								}
 							}
 							?>
@@ -111,9 +113,11 @@
 
 							for ($i = 1; $i <= $totalStars; $i++) {
 								if ($i <= $yellowStars) {
-									echo '<span class="star star-yellow"></span>';// 前三個圓圈
+									echo '<span class="fas fa-star" style="color:yellow;/* 設定外框粗細和顏色 */
+    /* -webkit-text-stroke: 3px #ffff8a; */"></span>';// 前三個圓圈
 								}else{
-									echo '<span class="star star-gray"></span>';// 剩兩個圓圈
+									echo '<span class="far fa-star" style="color:yellow;/* 設定外框粗細和顏色 */
+    /* -webkit-text-stroke: 3px #f0f0f0; */"></span>';// 剩兩個圓圈
 								}
 							}
 							?>

@@ -45,13 +45,15 @@
         .avatar-preview-container {
             width: 130px;
             height: 130px;
-            border: 2px dashed #ddd;
-            border-radius: 4px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            background: #f8f9fa;
+            position: relative;
             overflow: hidden;
+            background-color: #f9f9f9;
+            margin: 0 auto 10px auto;
         }
         .preview-avatar { width: 100%; height: 100%; object-fit: cover; display: none; }
         
@@ -88,6 +90,66 @@
         .section-toggle[aria-expanded="false"] .toggle-icon {
             transform: rotate(-90deg);
         }
+        /* 徹底隱藏原生 input file 及其自帶的灰色文字 */
+        .file-input {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            opacity: 0; overflow: hidden; pointer-events: none;
+        }
+        /* 徹底隱藏原生 input file 及其自帶的灰色文字 */
+        .avatar-file-input {
+            position: absolute;
+            top: 0; left: 0; width: 0; height: 0;
+            opacity: 0; overflow: hidden; pointer-events: none;
+        }
+
+        /* 預覽視窗外框 */
+        .preview-container {
+            width: 130px;
+            height: 130px;
+            border: 2px dashed #ccc;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            background-color: #f9f9f9;
+            margin: 0 auto 10px auto;
+        }
+
+        /* 圖片滿版且不變形 */
+        .image-preview {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+            object-position: center;
+            position: absolute;
+            top: 0; left: 0;
+        }
+
+        /* 圖片滿版且不變形 */
+        .avatar-image-preview {
+            width: 100% !important;
+            height: 100% !important;
+            object-fit: cover;
+            object-position: center;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        /* 客製化按鈕 */
+        .btn-select-file {
+            display: inline-block;
+            padding: 6px 14px;
+            font-size: 13px;
+            color: #495057;
+            background-color: #fff;
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .btn-select-file:hover { background-color: #e9ecef; }
     </style>
 </head>
 <body class="bg-light py-5">
@@ -109,14 +171,33 @@
         <div class="collapse show mb-5" id="basicInfoSection">
             <div class="row pt-2">
                 <div class="col-md-3 border-right">
-                    <div class="form-group text-center">
+                    <div class="form-group text-center upload-box"> <!-- 加上 .upload-box 方便 JS 抓取定位 -->
                         <label class="font-weight-bold text-muted d-block text-left">個人頭像 <span class="text-danger">*</span></label>
-                        <div class="avatar-preview-container mx-auto mb-2">
+                        
+                        <!-- 頭像預覽容器 -->
+                        <div class="avatar-preview-container mx-auto mb-2" style="position: relative; width: 120px; height: 120px; border: 2px dashed #ccc; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa; ">
+                            <!-- 尚未上傳文字 -->
                             <span id="avatarPlaceholder" class="text-muted small">尚未上傳</span>
-                            <img id="avatarPreview" src="#" alt="頭像預覽" class="preview-avatar">
+                            <!-- 預覽圖片 -->
+                            <img id="avatarPreview" src="#" alt="頭像預覽" class="preview-avatar /*rounded-circle*/" style="display: none; width: 100%; height: 100%; object-fit: cover;">
                         </div>
-                        <input type="file" id="avatarInput" name="avatar" class="form-control-file" accept="image/*" data-rule="required_avatar" style="font-size: 12px;">
-                        <div class="error-msg text-center">請上傳一張個人頭像</div>
+
+                        <!-- 客製化按鈕（採用你指定的結構） -->
+                        <label class="btn-select-file" style="cursor: pointer; display: block; text-align: center; margin-top: 10px;">
+                            <span class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-camera"></i> 選擇檔案
+                            </span>
+                            <!-- 隱藏的原生 Input (移除 id，改用 class 與單張上傳的 name="avatar") -->
+                            <input type="file" name="avatar" class="file-input" accept="image/*" data-rule="required_avatar" style="display: none;">
+                            <div class="error-msg text-center">請上傳一張個人頭像</div>
+                        </label>
+
+                        <!-- 顯示檔名 -->
+                        <div id="avatarFilename" class="text-muted text-center mt-2 mb-2" style="font-size: 11px; word-break: break-all;">
+                            未選擇任何檔案
+                        </div>
+                        
+                        
                     </div>
                 </div>
                 
@@ -254,6 +335,29 @@
 <script>
 $(document).ready(function() {
 
+    // 針對所有設定了 data-rule="required" 的 input 和 select
+    // 文字框用 input 監聽，下拉選單與檔案上傳用 change 監聽
+    $(document).on('input change','input[data-rule="required"], input[data-rule="age"], input[data-rule="phone"], input[data-rule="email"], input[data-rule="required_star"], input[data-rule="url"], select[data-rule="required"], textarea[data-rule="required"]', function() {
+        let $el = $(this);
+        let $error = $el.siblings('.error-msg');
+        let value = $el.val();
+
+        // 判斷是否有值 (文字框、下拉選單都適用)
+        // 如果是 file input，則判斷 files.length
+        let hasValue = false;
+        if ($el.attr('type') === 'file') {
+            hasValue = $el[0].files.length > 0;
+        } else {
+            hasValue = value !== null && value.trim() !== '';
+        }
+
+        // 根據檢查結果顯示或隱藏
+        if (hasValue) {
+            $error.hide();
+            $el.removeClass('is-invalid');
+        }
+    });
+
     // --- 1. 自動更新各動態區塊上方的 ID 序號 ---
     function refreshIDs(containerId, prefixCh) {
         $(`#${containerId} .drag-item`).each(function(index) {
@@ -274,15 +378,42 @@ $(document).ready(function() {
     new Sortable(document.getElementById('portfolioContainer'), sortableOptions('portfolioContainer', '作品'));
 
     // --- 3. 個人大頭貼即時預覽功能 ---
-    $('#avatarInput').change(function() {
-        const file = this.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                $('#avatarPlaceholder').hide();
-                $('#avatarPreview').attr('src', e.target.result).show();
+    // 監聽頭像選擇變更事件
+    // 監聽頭像區塊內的 file input 變更
+    $('.upload-box').on('change', 'input[name="avatar"]', function() {
+        const input = this;
+        // 利用相對路徑尋找同一組 upload-box 內的元素，避免影響到下面的作品集區塊
+        const $uploadBox = $(input).closest('.upload-box');
+        const $previewImg = $uploadBox.find('#avatarPreview');
+        const $placeholder = $uploadBox.find('#avatarPlaceholder');
+        const $filenameDisplay = $uploadBox.find('#avatarFilename');
+        const $error = $uploadBox.find('.error-msg');
+        
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            
+            // 1. 產生即時預覽的臨時虛擬網址
+            const previewUrl = URL.createObjectURL(file);
+            
+            // 2. 將預覽圖塞入 img src 並顯現
+            $previewImg.attr('src', previewUrl).show();
+            
+            // 3. 隱藏「尚未上傳」文字
+            $placeholder.hide();
+            
+            // 4. 更新檔名顯示
+            $filenameDisplay.text(file.name);
+
+            if (input.files[0].length === 0) {
+                $error.show(); $input.addClass('is-invalid'); isValid = false;
+            } else {
+                $error.hide(); $input.removeClass('is-invalid');
             }
-            reader.readAsDataURL(file);
+        } else {
+            // 防呆：如果使用者點了取消、沒有選取任何檔案
+            $previewImg.attr('src', '#').hide();
+            $placeholder.show();
+            $filenameDisplay.text('未選擇任何檔案');
         }
     });
 
@@ -364,15 +495,28 @@ $(document).ready(function() {
                 </div>
                 
                 <div class="row">
-                    <div class="col-md-3 border-right">
-                        <div class="form-group">
-                            <label>作品縮圖 <span class="text-danger">*</span></label>
-                            <input type="file" name="portfolio_image[]" class="form-control-file portfolio-img-input" multiple accept="image/*" data-rule="required_portfolio_img" style="font-size: 12px;">
-                            <div class="error-msg">請上傳作品縮圖</div>
-                            <div class="mt-2 portfolio-preview-container">
-                                <span class="text-muted small thumb-placeholder">暫無縮圖預覽</span>
-                                <img src="#" alt="縮圖預覽" class="preview-portfolio">
-                            </div>
+                    <div class="col-md-3 mb-4 upload-box border-right" data-init-src="" data-init-name="未選擇任何檔案">
+                    
+                        <div class="preview-container" style="/*position: relative; width: 100%; height: 150px; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; overflow: hidden; background: #f8f9fa;*/">
+                            <!-- 預設顯示尚未上傳 -->
+                            <span class="placeholder-text" style="color: #6c757d;">尚未上傳</span>
+                            
+                            <!-- 預覽圖先隱藏 (注意：加上了 class 'image-preview') -->
+                            <img class="image-preview" src="" alt="預覽圖" style="display: none; /*max-width: 100%; max-height: 100%; object-fit: contain;*/">
+                        </div>
+                        
+                        <!-- 客製化按鈕 -->
+                        <label class="btn-select-file" style="cursor: pointer; display: block; text-align: center; margin-top: 10px;">
+                            <span class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-camera"></i> 選擇檔案
+                            </span>
+                            <input type="file" name="portfolio_image[]" class="file-input" accept="image/*" data-rule="required_portfolio_img" style="display: none;">
+                            <div class="error-msg text-center">請上傳一張作品縮圖</div>
+                        </label>
+                        
+                        <!-- 顯示檔名 -->
+                        <div class="filename-display text-muted text-center" style="font-size: 11px; margin-top: 5px; word-break: break-all;">
+                            未選擇任何檔案
                         </div>
                     </div>
                     
@@ -398,6 +542,50 @@ $(document).ready(function() {
                 </div>
             </div>`;
     }
+
+    // 監聽整個 container 底下所有 file input 的變更事件 (支援動態新增元素)
+    $('#portfolioContainer').on('change', '.file-input', function() {
+        const input = this;
+        const $uploadBox = $(input).closest('.upload-box');
+        const $previewImg = $uploadBox.find('.image-preview');
+        const $placeholder = $uploadBox.find('.placeholder-text');
+        const $filenameDisplay = $uploadBox.find('.filename-display');
+        const $error = $uploadBox.find('.error-msg');
+        
+        if (input.files && input.files[0]) {
+            const file = input.files[0];
+            
+            // 1. 產生即時預覽 URL
+            const previewUrl = URL.createObjectURL(file);
+            
+            // 2. 顯示圖片、隱藏「尚未上傳」文字
+            $previewImg.attr('src', previewUrl).show();
+            $placeholder.hide();
+            
+            // 3. 更新顯示的檔案名稱
+            $filenameDisplay.text(file.name);
+
+            if (input.files[0].length === 0) {
+                $error.show(); $input.addClass('is-invalid'); isValid = false;
+            } else {
+                $error.hide(); $input.removeClass('is-invalid');
+            }
+            
+        } else {
+            // 防呆：如果使用者點了取消、沒有選檔案，就復原為初始狀態
+            const initSrc = $uploadBox.data('init-src');
+            const initName = $uploadBox.data('init-name') || '未選擇任何檔案';
+            
+            if (initSrc) {
+                $previewImg.attr('src', initSrc).show();
+                $placeholder.hide();
+            } else {
+                $previewImg.attr('src', '').hide();
+                $placeholder.show();
+            }
+            $filenameDisplay.text(initName);
+        }
+    });
 
     // --- 5. 初始化頁面自動加載第一筆數據 ---
     $('#experienceContainer').append(createExperienceItem()); refreshIDs('experienceContainer', '經歷');
@@ -446,6 +634,12 @@ $(document).ready(function() {
                 $(this).removeClass('fas checked').addClass('far');
             }
         });
+        // 因為 error-msg 是放在容器（.rating-stars）的外面（同層下方）
+        // 所以要先從容器出發，去找它的兄弟元素 .error-msg
+        let $error = $container.siblings('.error-msg');
+        
+        $error.hide(); // 隱藏錯誤訊息
+        // $hiddenInput.removeClass('is-invalid'); // 如果有外框紅線就一併移除
     });
 
     // --- 6. 前端 jQuery 正則表達式驗證機制 ---

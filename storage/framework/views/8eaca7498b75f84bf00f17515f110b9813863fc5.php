@@ -81,6 +81,8 @@
   <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
+  
+  <?php if($site_blade=='front.classItem'): ?>
   <div class="parent_foot">
     <div class="col-md-12 child_foot">
         <?php $__currentLoopData = $breadcrumbs; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $breadcrumb): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
@@ -88,9 +90,10 @@
         <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
     </div>
   </div>
+  <?php endif; ?>
   <p>LINE ID:<?php echo e($PostPaginate[0]->site_lineid); ?></p>
-  <p>Wechat id：<?php echo e($PostPaginate[0]->site_wechartid); ?></p>
+  <!-- <p>Wechat id：<?php echo e($PostPaginate[0]->site_wechartid); ?></p> -->
   <p>連繫電話 ：<?php echo e($PostPaginate[0]->site_cellphone); ?></p>
-  <p>地址 ：<?php echo e($PostPaginate[0]->site_address); ?></p>
+  <!-- <p>地址 ：<?php echo e($PostPaginate[0]->site_address); ?></p> -->
   <p>Copyright©<?php echo date('20y')?> ericsonic520,ltd.All right reserved.</p> 
 </footer><?php /**PATH C:\Users\ericsonic520\Desktop\res\ck5\resources\views/front/blade/footer.blade.php ENDPATH**/ ?>

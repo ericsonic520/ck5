@@ -27,8 +27,8 @@
     </div>
   </div>
   <div>LINE ID:<?php echo e($site_lineid); ?></div>
-  <div>Wechat id：<?php echo e($site_wechartid); ?></div>
-  <div>連繫電話 ：<?php echo e($site_cellphone); ?></div>
-  <div>地址 ：<?php echo e($site_address); ?></div>
+  <!-- <div>Wechat id：<?php echo e($site_wechartid); ?></div> -->
+  <!-- <div>連繫電話 ：<?php echo e($site_cellphone); ?></div> -->
+  <!-- <div>地址 ：<?php echo e($site_address); ?></div> -->
   <div>Copyright©<?php echo date('20y')?> ericsonic520,ltd.All right reserved.</p> 
 </footer><?php /**PATH C:\Users\ericsonic520\Desktop\res\ck5\resources\views/front/inside/footer.blade.php ENDPATH**/ ?>

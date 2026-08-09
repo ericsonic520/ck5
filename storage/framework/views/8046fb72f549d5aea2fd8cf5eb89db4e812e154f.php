@@ -154,8 +154,15 @@
 			</div>
 			<br>
 		</div>
-		
+		<div class="col-md-12">
+			<iframe width="100%" height="800" src="https://www.youtube.com/embed/GWLEk0EBz5U?si=VmKNIVoJ99gbhEeh" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+		</div>
+		<div class="col-md-12">
+			<label for="placeholder">藝術家據點:220新北市板橋區新興里南雅南路一段5巷19號2 樓</label>
+			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3615.842009128057!2d121.45650669999999!3d25.005483900000005!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x346802a898f7727b%3A0x6d7d862a38859c1e!2z6Jed6KGT5a62576O5a6557SL57mhIOeyiemcp-eciQ!5e0!3m2!1szh-TW!2stw!4v1786036260496!5m2!1szh-TW!2stw" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+		</div>
 	</div>
+	
 	<!-- 貼到 </body> 之前 -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
