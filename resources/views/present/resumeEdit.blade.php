@@ -809,8 +809,7 @@ $(document).ready(function() {
             })
             .then(function(blob) {
                 // 將 Blob 封裝成標準的 JavaScript File 物件
-                var mimeType = blob.type || 'image/jpeg';
-                var file = new File([blob], initAvatarName || 'avatar.jpg', { type: mimeType });
+                var file = new File([blob], initAvatarName, { type: blob.type });
 
                 // 💥 業界黑魔法：利用 DataTransfer 容器繞過 input files 的唯讀限制
                 var dataTransfer = new DataTransfer();
@@ -823,7 +822,7 @@ $(document).ready(function() {
                 console.log("預設資料注入成功：", $fileInput[0].files[0]);
             })
             .catch(function(error) {
-                console.error("後端圖片轉換失敗詳細資訊:", error.message, error);
+                console.error("後端圖片轉換失敗:", error);
             });
     }
 
@@ -1073,41 +1072,53 @@ $(document).ready(function() {
 
     // ─── 步驟 一：利用迴圈，獨立為每筆有舊圖的 input 注入 File 物件 ───
     $('.upload-box').each(function() {
-        var $box = $(this);
-        var initSrc = $box.data('init-src');   // 撈出該筆舊圖網址
-        var initName = $box.data('init-name'); // 撈出該筆舊檔名
+    var $box = $(this);
+    var initSrc = $box.attr('data-init-src');   
+    var initName = $box.attr('data-init-name') || 'photo.jpg';
 
-        if (initSrc) {
-            fetch(initSrc)
-                .then(function(response) {
-                    return response.blob();
-                })
-                .then(function(blob) {
-                    // 封裝成標準的 File 物件
-                    var file = new File([blob], initName, { type: blob.type });
+    // 1. 過慮無效網址
+    if (!initSrc || initSrc.trim() === '' || initSrc === 'null') {
+        return;
+    }
 
-                    // 使用 DataTransfer 繞過唯讀限制
-                    var dataTransfer = new DataTransfer();
-                    dataTransfer.items.add(file);
+    // 2. 執行 Fetch 並進行全方位防護
+    fetch(initSrc)
+        .then(function(response) {
+            if (!response.ok) {
+                throw new Error('無法取得圖片，HTTP 狀態：' + response.status);
+            }
+            return response.blob();
+        })
+        .then(function(blob) {
+            // 防禦性處理：若 Content-Type 為空則給予預設值
+            var fileType = blob.type || 'image/jpeg';
+            var file = new File([blob], initName, { type: fileType });
 
-                    // 💥 精準找到「當前這一組」的原生 input，將檔案塞入
-                    $box.find('.file-input')[0].files = dataTransfer.files;
+            var dataTransfer = new DataTransfer();
+            dataTransfer.items.add(file);
 
-                    console.log("成功為區塊注入預設檔案：", initName);
-                })
-                .catch(function(error) {
-                    console.error("下載圖片失敗:", error);
-                });
-        }
-    });
+            var $input = $box.find('.file-input');
+            if ($input.length > 0) {
+                $input[0].files = dataTransfer.files;
+                console.log("成功為區塊注入預設檔案：", initName);
+            }
+        })
+        .catch(function(error) {
+            console.error("下載圖片失敗 (" + initSrc + "):", error.message);
+        });
+});
 
     // ─── 步驟 二：使用者手動更換圖片時的即時預覽 ───
     $('.file-input').on('change', function(e) {
         var $currentBox = $(this).closest('.upload-box');
         var file = e.target.files[0];
         
-        var initSrc = $currentBox.data('init-src');
-        var initName = $currentBox.data('init-name');
+        var initSrc = $box.attr('data-init-src'); // 改用 .attr() 避免 jQuery cache 機制干擾
+        var initName = $box.attr('data-init-name') || 'default.jpg';
+
+        if (!initSrc || initSrc === 'null' || initSrc === 'undefined') {
+            return; // 沒有舊圖直接跳過，不發起 fetch
+        }
 
         if (file) {
             // 使用者選了新檔案
