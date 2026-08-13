@@ -43,7 +43,7 @@
 			<h3>嚴選網</h3>
 		</div>
 		<div class="image">
-			<a href="https://www.facebook.com/profile.php?id=100057390320529" title="藝術家紋繡">
+			<a href="https://www.facebook.com/profile.php?id=61593148861970" title="藝術家紋繡">
 				<img src="/images/present/facebook-icon.png" class="fa-brands fa-facebook" width="170" style="border:0px;" alt="藝術家紋繡">
 			</a>
 		</div>
@@ -85,7 +85,7 @@
 				<h3>嚴選網</h3>
 			</div>
 			<div class="image">
-				<a href="https://www.facebook.com/profile.php?id=100057390320529" title="藝術家紋繡">
+				<a href="https://www.facebook.com/profile.php?id=61593148861970" title="藝術家紋繡">
 					<img src="/images/present/facebook-icon.png" width="170" style="border:0px;" alt="藝術家紋繡">
 				</a>
 			</div>
@@ -130,7 +130,7 @@
 				<h3>嚴選網</h3>
 			</div>
 			<div class="image">
-				<a href="https://www.facebook.com/profile.php?id=100057390320529" title="藝術家紋繡">
+				<a href="https://www.facebook.com/profile.php?id=61593148861970" title="藝術家紋繡">
 					<img src="/images/present/facebook-icon.png" width="170" style="border:0px;" alt="藝術家紋繡">
 				</a>
 			</div>

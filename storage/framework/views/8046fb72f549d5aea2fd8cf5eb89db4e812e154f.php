@@ -54,6 +54,21 @@
       object-fit: cover;
     }
 
+	/* 1. 先清空 Swiper 預設字型設定 */
+.swiper-button-next::after,
+.swiper-button-prev::after {
+    font-family: inherit; /* 改用系統預設字型 */
+    font-size: 24px;
+    font-weight: bold;
+}
+
+
+
+/* 粗體箭頭 ▶ */
+.swiper-button-next::after {
+    content: '▶'; /* 或 '\25B6' */
+}
+
 </style>
 <style>
     .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{border-top:0px solid #ddd;}
@@ -108,7 +123,7 @@
 			</div>
 		</div>
    
-		<div class="col-md-6 " style="height: 240px;">
+		<div class="col-md-6 ">
 			
 			<?php echo $__env->make('components.validationErrorMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 			<div class="table table-hover table-dark">
@@ -131,7 +146,7 @@
 			
 			<br>
 		</div>
-		<div class="col-md-6"  style="height: 240px;">
+		<div class="col-md-6">
 			
 			<?php echo $__env->make('components.validationErrorMessage', \Illuminate\Support\Arr::except(get_defined_vars(), ['__data', '__path']))->render(); ?>
 			<div class="table table-hover table-dark">
