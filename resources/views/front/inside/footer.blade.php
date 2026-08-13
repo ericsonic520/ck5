@@ -16,7 +16,7 @@
 </style>
 <!-- Footer -->
 <footer class="text-center">
-  <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
+  <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP" class="top">
     <span class="glyphicon glyphicon-chevron-up"></span>
   </a>
   <div class="parent_foot">
@@ -26,7 +26,13 @@
         @endforeach
     </div>
   </div>
-  <div>LINE ID:{{ $site_lineid }}</div>
+  <div class="container">
+      <div class="row justify-content-center g-4">
+        <div class="col-md-6 col-lg-3">
+          <div>LINE ID:{{ $site_lineid }}</div>
+        </div>
+      </div>
+  </div>
   <!-- <div>Wechat id：{{ $site_wechartid }}</div> -->
   <!-- <div>連繫電話 ：{{ $site_cellphone }}</div> -->
   <!-- <div>地址 ：{{ $site_address }}</div> -->

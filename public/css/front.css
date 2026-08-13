@@ -375,6 +375,11 @@ body {
         padding: 15px 15px 25px 15px;
         margin: 10px 10px 10px 10px;
       }
+      .sign_proj_pic{
+        /* position: absolute; */
+        text-align: center;
+        color: #777;
+      }
       .ctn_bor{
         border: 3px solid #52f6de;
         padding:0px;
@@ -655,12 +660,17 @@ body {
         margin: auto;
       }
       .sign_proj_tit{
-        border: 1px solid red;
+        border: 1px solid #52f6de;
         display: flex;
         float: left;
         border-radius: 2vw;
         padding: 5vw 7vw;
         margin: 10px 10px 10px 10px;
+      }
+      .sign_proj_pic{
+        /* position: absolute; */
+        text-align: center;
+        color: #777;
       }
       .ctn_bor{
         border: 3px solid #52f6de;

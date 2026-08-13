@@ -2,6 +2,8 @@
 @section('title', $title)
 @section('description', $description)
 @section('content')
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" type="text/css" />
+
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 	@foreach($presents as $key => $presents)
@@ -142,7 +144,7 @@
 						
 						<img src="{{ json_decode($presents->resume_sideproject, true)[$key]['路徑'] }}" alt="{{ json_decode($presents->resume_sideproject, true)[$key]['說明'] }}" style="width: 100px;height: 60px;">
 					</div>
-					<div style="position: absolute;margin: 85px 20px;">{{ json_decode($presents->resume_sideproject, true)[$key]['圖片名稱'] }}</div>
+					<div class="sign_proj_pic">{{ json_decode($presents->resume_sideproject, true)[$key]['圖片名稱'] }}</div>
 				</a>		
 			@endforeach		
 		</div>
@@ -150,6 +152,7 @@
 		<div class="container ctn_bor">
 		<div style="background-color:#52f6de;color:white;text-align:center;">聯絡我</div>
 		<div class="contant" style="color:gray;text-align:center;">手機:{{ $presents->resume_cellphone }}</div>
+		<div style="color:gray;text-align:center;">Line:<a href="https://line.me/ti/p/UCpYE6WinW">{{ $PostPaginate[0]->site_lineid }}</a></div>
 		<div style="color:gray;text-align:center;">信箱:{{ $presents->resume_email }}</div>
 		</div>
 	</div>

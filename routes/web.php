@@ -24,6 +24,10 @@ Auth::routes();
 
 // 前台首頁
 Route::get('/', 'FrontController@classIndex');
+// 履歷表首頁
+Route::get('/resume', 'FrontController@resumeIndex');
+// 藝術家首頁
+Route::get('/artist', 'FrontController@artistIndex');
 // 处理AJAX验证请求
 Route::post('/verifydata', 'PresentController@testAjax');
 // 处理AJAX验证请求
