@@ -704,7 +704,7 @@ class NewsController extends Controller
         // if (!is_null($News->pic)) {
         //     $News->pic = url($News->pic);
         // }
-
+    
         $binding = [
             'title' => '編輯新聞',
             'News' => $News,
@@ -879,6 +879,7 @@ class NewsController extends Controller
     // 前台新聞內容
      public function newsItem($post_id)
     {
+        
         $post = post::find($post_id);
         $Posts = DB::table('posts')
                 ->where('posts.post_id','=',$post_id)
@@ -904,6 +905,22 @@ class NewsController extends Controller
                         ->where('site_id','=','1')
                         ->get();
         
+        $site_blade = DB::table('sites')
+                        // ->select('site_blade')
+                        ->where('site_display' , '=' ,'1')
+                        ->get();
+
+        $row_per_page = 5;
+
+        // 撈取新聞分頁資料
+        $PostPaginate = DB::table('posts')
+            ->where('posts.post_sort','=','3')
+            ->join('sorts','sorts.sort_id','=','posts.post_sort')
+            ->leftjoin('sites','sites.site_id','=','posts.post_site')
+            ->where('post_display','=','1')
+            ->OrderBy('post_id', 'asc')
+            ->paginate($row_per_page);
+
         $binging = [
             'sort_name' => $Posts[0]->sort_name,
             'sort_name_en' => $Posts[0]->sort_name_en,
@@ -924,6 +941,8 @@ class NewsController extends Controller
             'breadcrumbs' => $breadcrumbs,
             'menus' => $menus,
             'site' => $SitePaginate,
+            'site_blade' => $site_blade,
+            'PostPaginate' => $PostPaginate,
         ];
         // $News = DB::table('posts')
         //         ->where('posts.post_id','=',$news_id)

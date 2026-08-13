@@ -117,7 +117,7 @@
               <div class="col-md-4 col-lg-12">
                 <h2 class="footer-title">社群連結</h2>
                 <a class="social-link" href="https://www.facebook.com/profile.php?id=61593148861970" target="_blank" rel="noopener" aria-label="Facebook"><i class="fa-brands fa-facebook fa-2xl" style="color: #ffffff;"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
-                <a class="social-link" href="https://www.youtube.com/channel/UCr2iYjQMy2xFBGYPvs1W5tQ" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2xl" style="color: #ffffff;"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
+                <a class="social-link" href="https://www.youtube.com/watch?v=GWLEk0EBz5U&t=29s" target="_blank" rel="noopener" aria-label="YouTube"><i class="fa-brands fa-youtube fa-2xl" style="color: #ffffff;"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
                 <a class="social-link" href="https://line.me/R/ti/p/@245xjwxu?oat_content=url&ts=08060146" target="_blank" rel="noopener" aria-label="LINE"><i class="fa-brands fa-line fa-2xl" style="color: #ffffff;"></i></a>&nbsp;&nbsp;&nbsp;&nbsp;
               </div>
             </div>
