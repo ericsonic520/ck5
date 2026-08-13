@@ -96,8 +96,13 @@
             </div>
             <div class="col-md-4 col-lg-3">
               <div class="col-md-4 col-lg-12">
-                <H2>{{$PostPaginate[0]->site_name}}</H2>
-                <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>{{$PostPaginate[0]->site_address}}</p>
+                @if(isset($PostPaginate[0]))
+                    <h2>{{ $PostPaginate[0]->site_name }}</h2>
+                    <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>{{ $PostPaginate[0]->site_address }}</p>
+                @else
+                    <h2>{{ $site[0]->site_name ?? '' }}</h2>
+                    <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i>{{ $site[0]->site_address ?? '' }}</p>
+                @endif
                 <p><i class="fa-solid fa-phone" style="color: #ffffff;"></i>{{$site[0]->site_cellphone}}</p>
               </div> 
             </div>

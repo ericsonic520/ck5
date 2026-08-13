@@ -77,7 +77,7 @@
 }
 </style>
 <!-- Footer -->
-<footer><?php dd($PostPaginate[0]->site_name); ?>
+<footer>
         <div class="text-center">
           <a class="up-arrow" href="#myPage" data-toggle="tooltip" title="TO TOP">
             <span class="glyphicon glyphicon-chevron-up"></span>
@@ -96,8 +96,13 @@
             </div>
             <div class="col-md-4 col-lg-3">
               <div class="col-md-4 col-lg-12">
-                <H2><?php echo e($PostPaginate[0]->site_name); ?></H2>
-                <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i><?php echo e($PostPaginate[0]->site_address); ?></p>
+                <?php if(isset($PostPaginate[0])): ?>
+                    <h2><?php echo e($PostPaginate[0]->site_name); ?></h2>
+                    <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i><?php echo e($PostPaginate[0]->site_address); ?></p>
+                <?php else: ?>
+                    <h2><?php echo e($site[0]->site_name ?? ''); ?></h2>
+                    <p><i class="fa-solid fa-location-dot" style="color: #ffffff;"></i><?php echo e($site[0]->site_address ?? ''); ?></p>
+                <?php endif; ?>
                 <p><i class="fa-solid fa-phone" style="color: #ffffff;"></i><?php echo e($site[0]->site_cellphone); ?></p>
               </div> 
             </div>
