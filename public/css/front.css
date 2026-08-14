@@ -794,7 +794,17 @@ body {
       }
     }
     
-
+    .up-arrow{
+      position: fixed;
+      right: 30px;
+      bottom: 30px;
+      color: black;
+      background-color: white;
+      width: 52px;
+      height: 52px;
+      padding: 13px 15px;
+      border: 3px solid #000000;
+    }
     .table>tbody>tr>td, .table>tbody>tr>th, .table>tfoot>tr>td, .table>tfoot>tr>th, .table>thead>tr>td, .table>thead>tr>th{border-top:0px solid #ddd;}
     .table>tbody>tr:nth-child(1)>td{padding: 5px;border-bottom: 1px #777 dotted;font-size: 18px;font-weight: bold;}
     .artivceTitle h3{margin: 0;padding: 0 0 8px 50px;border: 0;float: left;font-size: 18px;font-weight: bold;color: #2d2d2d;}
