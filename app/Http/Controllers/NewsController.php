@@ -1130,6 +1130,10 @@ class NewsController extends Controller
                 ->Paginate($row_per_page);
         $count = $Posts->total();
         $total_pages = ceil($count/$row_per_page);
+        $site_blade = DB::table('sites')
+                        // ->select('site_blade')
+                        ->where('site_display' , '=' ,'1')
+                        ->get();
         // $PostsLast = DB::table('posts')
         //         ->join('sorts','sorts.sort_id','=','posts.post_sort')
         //         ->leftjoin('sites','sites.site_id','=','posts.post_site')
@@ -1158,6 +1162,7 @@ class NewsController extends Controller
             'site_description' => $Posts[0]->site_description,
             'slide_no' => 3,
             'site_name' => $Posts[0]->site_name,
+            'site_blade' => $site_blade,
             'post_title' => $Posts[0]->post_title,
             'post_time' => $Posts[0]->post_time,
             'Post' => $Posts,

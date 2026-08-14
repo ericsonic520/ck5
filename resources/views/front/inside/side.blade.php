@@ -96,8 +96,7 @@
 			</div>
 			<div class="image">
 				<a href="" title="ig">
-					<img src="
-					" width="170" style="border:0px;" alt="ig">
+					<img src="/images/present/instagram-icon.png" width="170" style="border:0px;" alt="ig">
 				</a>
 			</div>
 			<div class="image">
@@ -169,7 +168,7 @@
 
   <!-- 展開的社交圖示 -->
   <div class="social-icons">
-    <a href="https://www.facebook.com/profile.php?id=100038815970086" class="social-icon facebook" title="Facebook"><img src="/images/present/sing_in-facebook.png" style="width:100%;" alt=""></a>
+    <a href="https://www.facebook.com/profile.php?id=61593148861970" class="social-icon facebook" title="Facebook"><img src="/images/present/sing_in-facebook.png" style="width:100%;" alt=""></a>
     <a href="https://lin.ee/9bluf6g" class="social-icon line" title="LINE"><img src="/images/present/sing_in-line.png" style="width:100%;" alt=""></a>
     <!-- <a href="#" class="social-icon twitter" title="X">X</a> -->
   </div>
@@ -178,14 +177,14 @@
 <style>
 /* 容器固定右下角 */
 .social-widget {
-  position: fixed;
-  bottom: 30px;
-  right: 30px;
-  display: flex;
-  flex-direction: column-reverse;
-  align-items: center;
-  gap: 12px;
-  z-index: 9999;
+  	position: fixed;
+	bottom: 100px;
+	right: 30px;
+	display: flex;
+	flex-direction: column-reverse;
+	align-items: center;
+	gap: 12px;
+	z-index: 9999;
 }
 
 /* 主旋轉按鈕樣式 */
