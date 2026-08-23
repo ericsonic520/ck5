@@ -772,11 +772,17 @@ body {
         gap: 12px;
         padding: 25px 25px;                        /* 手機版間距縮小 */
         margin-top: 30px;
+        width: 100%;
       }
 
       .banner-title {
         font-size: 14px;                      /* 手機版文字縮小 */
         padding: 6px 2px;
+        text-align: center;
+      }
+      .banner-img-box-picture {
+        width: 100%;
+        height: 200px;
       }
       .ctn_bor{
         border: 3px solid #52f6de;

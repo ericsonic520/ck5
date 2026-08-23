@@ -174,7 +174,7 @@
 				<div class="banner-img-box">
 					<picture>
 					<source media="(max-width: 768px)" srcset="{{ asset($item['路徑']) }}">
-					<img src="{{ asset($item['路徑']) }}" alt="{{ $item['圖片名稱'] ?? '' }}" class="banner-img">
+					<img src="{{ asset($item['路徑']) }}" alt="{{ $item['圖片名稱'] ?? '' }}" class="banner-img banner-img-box-picture">
 					</picture>
 				</div>
 
