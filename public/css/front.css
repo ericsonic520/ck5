@@ -618,6 +618,10 @@ body {
 
     /* 手機版 */
     @media (min-width: 0px) and (max-width: 768px){
+      html, body {
+        max-width: 100%;
+        overflow-x: hidden;
+      }
       .container {
         width: 100%;
         padding: 2vw;
