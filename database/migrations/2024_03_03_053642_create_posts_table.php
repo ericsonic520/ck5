@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table->string('post_title')->nullable();
             $table->string('post_sort')->nullable();
             $table->longText('post_description')->nullable();
+            $table->string('site_id')->nullable();
             $table->string('post_site')->nullable();
             $table->string('post_display')->nullable();
             $table->string('post_time')->nullable();

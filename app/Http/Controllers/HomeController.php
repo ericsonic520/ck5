@@ -95,13 +95,19 @@ class HomeController extends Controller
            $img->setAttribute('src', $image_name);     
         }
         $description = $dom->saveHTML(); 
+
+        $site = DB::table('sites')
+                ->where("site_display","=","1")
+                ->get();
+
         post::create([
             'post_title' => $request->post_title,
             'post_sort' => $request->post_sort,
             'post_description' => $description,
             'post_site' => 1,
             'post_display' => 1,    //預設新增新聞為檢視
-            'create_time' => date("Y/m/d H:i:s"),
+            'site_id' => $site[0]->site_id,
+            'post_time' => date("Y/m/d H:i:s"),
         ]);
         // $post = new Post;
         // $post->title = $title;

@@ -21,5 +21,6 @@ class post extends Model
         'post_site',
         'post_display',
         'post_time',
+        'site_id',
     ];
 }

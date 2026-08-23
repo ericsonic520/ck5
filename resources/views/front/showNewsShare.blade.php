@@ -30,7 +30,7 @@
     <div class="container">
         <div class="topNav">	
             <div class="nav">
-            <h3>網站主選單</h3>
+            <!-- <h3>網站主選單</h3> -->
             <ul class="Breadcrumbs">
                 @foreach($breadcrumbs as $breadcrumb)
                 <li><a href="{{ $breadcrumb->breadcrumb_api }}"><div>{{ $breadcrumb->breadcrumb_name_en }}</div><div>{{ $breadcrumb->breadcrumb_name }}</div></a></li>

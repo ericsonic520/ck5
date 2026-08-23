@@ -1205,6 +1205,10 @@ class NewsController extends Controller
         $breadcrumbs = DB::table('breadcrumbs')->get();
         $menus = DB::table('menus')->get();
         $SitePaginate = DB::table('sites')->get(); 
+        $site_blade = DB::table('sites')
+                        // ->select('site_blade')
+                        ->where('site_display' , '=' ,'1')
+                        ->get();
         
         $binging = [
             'sort_name' => $Faqs[0]->sort_name,
@@ -1230,6 +1234,7 @@ class NewsController extends Controller
             'menu_caption' => $menus[0]->menu_caption,
             'menu_description' => $menus[0]->menu_description,
             'total_pages' => $total_pages,
+            'site_blade' => $site_blade,
         ];
         
         if($SitePaginate[0]->site_maintain=='0'){

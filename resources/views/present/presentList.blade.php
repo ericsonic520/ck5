@@ -73,13 +73,14 @@
 			<span class="skil_tit">技能 | Skill</span>
 			<div class="wrap">
 				<ul class="skill">
+					<li>
 					@php
 						$data = json_decode($presents->resume_skill, true);
 					@endphp
 					<h2>前端</h2>
 					@foreach($data as $key => $value)
 					@if($data[$key]['type']=="frontend")
-					<li class="skil_bor">
+					<ul class="skil_bor">
 						<p>
 							<div class="skil_bor_nam">{{ $data[$key]['skill'] }}</div><div class="star-container star_ctrl">
 							@php
@@ -98,14 +99,16 @@
 							@endphp
 							</div>
 						</p>
-					</li>
+					</ul>
 					@endif
 					@endforeach
+					</li>
 					<hr>
+					<li class="skill_li2">
 					<h2>後端</h2>
 					@foreach($data as $key => $value)
 					@if($data[$key]['type']=="backend")
-					<li class="skil_bor">
+					<ul class="skil_bor">
 						<p>
 							<div class="skil_bor_nam">{{ $data[$key]['skill'] }}</div><div class="star-container star_ctrl">
 							@php
@@ -124,66 +127,74 @@
 							@endphp
 							</div>
 						</p>
-					</li>
+					</ul>
 					@endif
 					@endforeach
-       
+					</li>
 					
 				</ul>
 			</div>
 		</div>
 
-		
+		<style>
+			/* 1. 外層容器：固定範圍，隱藏超出部分 */
+			.img-container {
+				/*width: 400px; */        /* 根據需求設定寬度 */
+				/*height: 300px; */       /* 根據需求設定高度 */
+				overflow: hidden;     /* 超出容器範圍的圖片部分隱藏 */
+				border-radius: 8px;   /* 選擇性：加上圓角 */
+				margin: 0 15px;
+			}
+
+			/* 2. 圖片本體：設定過渡動畫 */
+			.img-container img {
+				width: 100%;
+				height: 100%;
+				object-fit: cover;
+			
+				/* 動畫平滑設定：轉換過程耗時 0.3 秒，使用 ease 緩動 */
+				transition: transform 0.3s ease;
+			}
+
+			/* 3. 懸停效果：滑鼠移上去時放大 */
+			.img-container:hover img {
+				transform: scale(1.1); /* 放大至 1.1 倍 (可自行調整，例如 1.05 或 1.2) */
+			}
+		</style>
 		
 		<div class="container intro">
 		<span class="sign_proj">開發經驗，作品   |   Works</span>
-		<div class="sign_proj_bor">
-			@foreach(json_decode($presents->resume_sideproject, true) as $key => $value)
-				<a href="{{ json_decode($presents->resume_sideproject, true)[$key]['連結'] }}">
-					<div class="sign_proj_tit">
-						
-						<img src="{{ json_decode($presents->resume_sideproject, true)[$key]['路徑'] }}" alt="{{ json_decode($presents->resume_sideproject, true)[$key]['說明'] }}" style="width: 100px;height: 60px;">
-					</div>
-					<div class="sign_proj_pic">{{ json_decode($presents->resume_sideproject, true)[$key]['圖片名稱'] }}</div>
-				</a>		
-			@endforeach		
-		</div>
-		</div>
-		<div class="container ctn_bor">
-		<div style="background-color:#52f6de;color:white;text-align:center;">聯絡我</div>
-		<div class="contant" style="color:gray;text-align:center;">手機:{{ $presents->resume_cellphone }}</div>
-		<div style="color:gray;text-align:center;">Line:<a href="https://line.me/ti/p/UCpYE6WinW">{{ $PostPaginate[0]->site_lineid }}</a></div>
-		<div style="color:gray;text-align:center;">信箱:{{ $presents->resume_email }}</div>
-		</div>
-	</div>
-	@endforeach
-		<div class="container" >
-			<div class="swiper mySwiper">
-				<div class="swiper-wrapper">
-					
-						<div class="swiper-slide">
-							<a href="">
-								<img src="" alt="" title="">
-								<div class="carousel-caption"></div>
-							</a>
-						</div>	
-							
+		<div class="banner-grid">
+			@php
+				$sideprojects = json_decode($presents->resume_sideproject, true) ?? [];
+			@endphp
+
+			@foreach($sideprojects as $item)
+				<a href="{{ $item['連結'] ?? '#' }}" class="banner-item" target="_blank">
+				<div class="banner-img-box">
+					<picture>
+					<source media="(max-width: 768px)" srcset="{{ asset($item['路徑']) }}">
+					<img src="{{ asset($item['路徑']) }}" alt="{{ $item['圖片名稱'] ?? '' }}" class="banner-img">
+					</picture>
 				</div>
-				<!-- If we need pagination -->
-				<div class="swiper-pagination"></div>
 
-				<!-- If we need navigation buttons -->
-				<div class="swiper-button-prev"></div>
-				<div class="swiper-button-next"></div>
-
-				<!-- If we need scrollbar -->
-				<div class="swiper-scrollbar"></div>
+				<!-- 圖片名稱 -->
+				<div class="banner-title">
+					{{ $item['圖片名稱'] ?? '' }}
+				</div>
+				</a>
+			@endforeach
 			</div>
 		</div>
-   
-		
-		
+		<div class="container ctn_bor">
+			<div style="background-color:#52f6de;color:white;text-align:center;">聯絡我</div>
+			<div class="contant" style="color:gray;text-align:center;">手機:{{ $presents->resume_cellphone }}</div>
+			<div style="color:gray;text-align:center;">Line:<a href="https://line.me/ti/p/UCpYE6WinW">{{ $PostPaginate[0]->site_lineid }}</a></div>
+			<div style="color:gray;text-align:center;">信箱:{{ $presents->resume_email }}</div>
+		</div>
 	</div>
+	@endforeach		
+</div>
 	<!-- 貼到 </body> 之前 -->
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script>
@@ -209,4 +220,33 @@
 		}
 	});
 </script>
+<style>
+/* 1. 隱藏原生箭頭圖示 (加上 !important 確保強制蓋掉 Swiper 預設) */
+.swiper-button-prev::after,
+.swiper-button-next::after {
+  display: none !important;
+  content: "" !important;
+}
+
+/* 2. 設定按鈕尺寸與背景 */
+.swiper-button-prev,
+.swiper-button-next {
+  width: 40px !important;
+  height: 40px !important;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* 3. 左箭頭：帶入圖片 */
+.swiper-button-prev {
+  background-image: url('/images/present/gemini-svg.svg');
+}
+
+/* 4. 右箭頭：帶入圖片並「水平翻轉 (scaleX(-1))」 */
+.swiper-button-next {
+  background-image: url('/images/present/gemini-svg.svg');
+  transform: translateY(-50%) scaleX(-1); /* ⭐️ 關鍵：維持原本居中並水平翻轉 */
+}
+</style>
 @endsection
