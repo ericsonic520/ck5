@@ -6,14 +6,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="/css/front.css">
-  <link rel="shortcut icon" href="/images/class/icon_book.png"/>
+  <link rel="shortcut icon" href="/images/present/artist.png"/>
   <!-- You can use Open Graph tags to customize link previews.
   Learn more: https://developers.facebook.com/docs/sharing/webmasters -->
-  <meta property="og:url"           content="https://www.ericsonic520.com/your-page.html" />
+  <meta property="og:url"           content="https://www.ericsonic520.com/" />
   <meta property="og:type"          content="website" />
-  <meta property="og:title"         content="Your Website Title" />
-  <meta property="og:description"   content="Your description" />
-  <meta property="og:image"         content="https://www.ericsonic520.com/path/image.jpg" />
+  <meta property="og:title"         content="零瑕疵紋繡" />
+  <meta property="og:description"   content="妊娠紋、肥胖紋、討厭的疤痕通通消失了！醫生推薦 口碑最高。" />
+  <meta property="og:image"         content="https://www.ericsonic520.com/images/present/artist.png" />
   <link rel="bookmark" href="/favicon.ico"/>
 
   <!-- bootstrap and jquery cdn -->
