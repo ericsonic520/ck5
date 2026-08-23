@@ -4,6 +4,12 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<title>@yield('title') - 零瑕疵紋繡-妊娠紋、肥胖紋、討厭的疤痕通通消失了！醫生推薦 口碑最高</title>
+		<!-- Open Graph / 社群分享標籤 (Line, Facebook 等) -->
+		<meta property="og:type" content="website">
+		<meta property="og:url" content="https://www.ericsonic520.com/">
+		<meta property="og:title" content="零瑕疵紋繡">
+		<meta property="og:description" content="妊娠紋、肥胖紋、討厭的疤痕通通消失了！醫生推薦 口碑最高。">
+		<meta property="og:image" content="https://www.ericsonic520.com/images/present/artist.png">
 		<!-- Tell the browser to be responsive to screen width -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<!-- Font Awesome -->
