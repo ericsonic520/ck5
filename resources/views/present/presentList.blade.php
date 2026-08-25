@@ -35,7 +35,7 @@
 			<div class="inf_bor">
 				<div class="inf_tit">姓名</div><div class="inf_des">{{ $presents->resume_nickname}}</div><br/>
 				<div class="inf_tit">性別</div><div class="inf_des">@if($presents->resume_sex==1)男@else女@endif</div><br/>
-				<div class="inf_tit">年齡</div><div class="inf_des">{{ $presents->resume_age}}</div><br/>
+				<!-- <div class="inf_tit">年齡</div><div class="inf_des">{{ $presents->resume_age}}</div><br/> -->
 				<!-- <div class="inf_tit">婚姻狀態</div><div class="inf_des">@if($presents->resume_marry==1)未婚@else已婚@endif</div><br/> -->
 				<div class="inf_tit">學歷</div><div class="inf_des">{{ $presents->resume_education}}</div><br/>
 				<div class="inf_tit">手機</div><div class="inf_des">{{ $presents->resume_cellphone}}</div><br/>
